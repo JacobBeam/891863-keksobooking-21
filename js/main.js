@@ -1,4 +1,5 @@
 'use strict';
+const map = document.querySelector(`.map`);
 
 const amountAd = 8;
 const minPrice = 0;
@@ -35,11 +36,14 @@ const possiblePhotos = [
   `http://o0.github.io/assets/images/tokyo/hotel3.jpg`
 ];
 
-const minWidthLocationPin = 100;
-const maxWidthLocationPin = 600;
-const minHeightLocationPin = 130;
-const maxHeightLocationPin = 630;
 
+// Возвращается 0 при попытке найти ширину newPin через offsetWidth, getComputedStyle, getBoundingClientRect(). Возможно, из-за того, что нет на странице. Задать вопрос
+const offsetXPin = 50 / 2;
+const offsetYPin = 70;
+const minWidthLocationPin = 0;
+const maxWidthLocationPin = map.clientWidth - offsetXPin * 2;
+const minHeightLocationPin = 130;
+const maxHeightLocationPin = 630 - offsetYPin;
 
 let getRandomNumber = function (min, max) {
   let random = min + Math.random() * (max + 1 - min);
@@ -101,3 +105,32 @@ let getArrayAd = function (avatars, titles, minCost, maxCost, types, numberRooms
 };
 
 let arrayAd = getArrayAd(avatarsMock, titlesMock, minPrice, maxPrice, houseType, amountRooms, amountGuests, checkinTime, checkoutTime, possibleFeatures, descriptionMock, possiblePhotos, minWidthLocationPin, maxWidthLocationPin, minHeightLocationPin, maxHeightLocationPin, amountAd);
+
+
+const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
+
+
+let renderPin = function (array) {
+  let newPin = mapPinTemplate.cloneNode(true);
+
+  newPin.style.left = array.location.x + offsetXPin + `px`;
+  newPin.style.top = array.location.y + offsetYPin + `px`;
+
+  let avatar = newPin.querySelector(`img`);
+  avatar.src = array.author.avatar;
+  avatar.alt = array.offer.title;
+
+  return newPin;
+};
+
+let getPinsBlock = function (array) {
+  let fragment = document.createDocumentFragment();
+  for (let i = 0; i < array.length; i++) {
+    fragment.append(renderPin(array[i]));
+  }
+  return fragment;
+};
+
+const pinsList = map.querySelector(`.map__pins`);
+pinsList.append(getPinsBlock(arrayAd));
+map.classList.remove(`map--faded`);
