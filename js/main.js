@@ -304,12 +304,12 @@ let validityCapacityInput = function () {
 };
 
 capacityInput.addEventListener(`change`, function () {
-  validityCapacityInput()
+  validityCapacityInput();
 });
 
 roomNumberInput.addEventListener(`change`, function () {
-  validityCapacityInput()
-})
+  validityCapacityInput();
+});
 
 // Функция активации страницы
 let activationPage = function () {
