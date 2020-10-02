@@ -287,8 +287,7 @@ addressInput.value =
 const roomNumberInput = adForm.querySelector(`#room_number`);
 const capacityInput = adForm.querySelector(`#capacity`);
 
-capacityInput.addEventListener(`change`, function () {
-
+let validityCapacityInput = function () {
   let roomValue = roomNumberInput.value;
   let capacityValue = capacityInput.value;
 
@@ -302,10 +301,18 @@ capacityInput.addEventListener(`change`, function () {
     capacityInput.setCustomValidity(``);
   }
   capacityInput.reportValidity();
+};
+
+capacityInput.addEventListener(`change`, function () {
+  validityCapacityInput()
 });
 
-// Активация страницы по ЛКМ
-const activationPage = function () {
+roomNumberInput.addEventListener(`change`, function () {
+  validityCapacityInput()
+})
+
+// Функция активации страницы
+let activationPage = function () {
   map.classList.remove(`map--faded`);
   adForm.classList.remove(`ad-form--disabled`);
 
@@ -321,6 +328,7 @@ const activationPage = function () {
   }
 };
 
+// Активация страницы по ЛКМ
 mapPinMain.addEventListener(`mousedown`, function (evt) {
   evt.preventDefault();
   if (evt.button === 0) {
@@ -335,6 +343,8 @@ mapPinMain.addEventListener(`mousedown`, function (evt) {
   addressInput.value =
     `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
  ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight)}`;
+}, {
+  once: true
 });
 
 
@@ -354,4 +364,6 @@ mapPinMain.addEventListener(`keydown`, function (evt) {
   addressInput.value =
     `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
   ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight)}`;
+}, {
+  once: true
 });
