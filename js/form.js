@@ -5,37 +5,9 @@
   // Деактивация формы при первом открытии
   const map = document.querySelector(`.map`);
   const adForm = document.querySelector(`.ad-form`);
-  const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
-  const mapFilter = document.querySelector(`.map__filters`);
-  const mapFilterFieldsets = mapFilter.querySelectorAll(`fieldset`);
-  const mapFilterSelects = mapFilter.querySelectorAll(`select`);
-
-  let deactivationPage = function () {
-    map.classList.add(`map--faded`);
-    adForm.classList.add(`ad-form--disabled`);
-
-    for (let fieldset of adFormFieldsets) {
-      fieldset.setAttribute(`disabled`, `disabled`);
-    }
-
-    for (let fieldset of mapFilterFieldsets) {
-      fieldset.setAttribute(`disabled`, `disabled`);
-    }
-
-    for (let select of mapFilterSelects) {
-      select.setAttribute(`disabled`, `disabled`);
-    }
-  };
-
-  deactivationPage();
-
-  // Заполнение поля Адрес при неактивном состоянии страницы
-  const mapPinMain = map.querySelector(`.map__pin--main`);
   const addressInput = adForm.querySelector(`#address`);
+  const mapPinMain = map.querySelector(`.map__pin--main`);
 
-  addressInput.value =
-    `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
- ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight / 2)}`;
 
   // Валидация поля "Количество гостей" и "Количество комнат"
   const roomNumberInput = adForm.querySelector(`#room_number`);
@@ -133,5 +105,19 @@
   timeoutInput.addEventListener(`change`, function () {
     timeinInput.value = timeoutInput.value;
   });
+
+  window.form = {
+
+    getStartMainPinCoords() {
+      addressInput.value =
+        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
+${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight / 2)}`;
+    },
+    getMainPinCoords() {
+      addressInput.value =
+        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
+${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight)}`;
+    }
+  };
 
 })();
