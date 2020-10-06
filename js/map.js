@@ -53,7 +53,7 @@
         appendNewCard(evt);
       });
     },
-    renderCardonEnter() {
+    renderCardOnEnter() {
       map.addEventListener(`keydown`, function (evt) {
         if (evt.key === `Enter`) {
           appendNewCard(evt);
