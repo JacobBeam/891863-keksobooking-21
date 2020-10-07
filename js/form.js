@@ -7,6 +7,7 @@
   const adForm = document.querySelector(`.ad-form`);
   const addressInput = adForm.querySelector(`#address`);
   const mapPinMain = map.querySelector(`.map__pin--main`);
+  const mapPinMainOffsetY = 80;
 
 
   // Валидация поля "Количество гостей" и "Количество комнат"
@@ -116,7 +117,7 @@ ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight / 2)
     getMainPinCoords() {
       addressInput.value =
         `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
-${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight)}`;
+${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
     }
   };
 

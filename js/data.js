@@ -41,13 +41,11 @@
 
 
   // Возвращается 0 при попытке найти ширину newPin через offsetWidth, getComputedStyle, getBoundingClientRect(). Возможно, из-за того, что нет на странице. Задать вопрос
-
-  const offsetXPin = 50 / 2;
   const offsetYPin = 70;
-  const minWidthLocationPin = 0;
-  const maxWidthLocationPin = map.clientWidth - offsetXPin * 2;
-  const minHeightLocationPin = 130;
-  const maxHeightLocationPin = 630 - offsetYPin;
+  let minWidthLocationPin = 0;
+  let maxWidthLocationPin = map.clientWidth;
+  let minHeightLocationPin = 130;
+  let maxHeightLocationPin = 630;
 
 
   let getAvatarsArray = function (amount) {
@@ -67,7 +65,7 @@
       window.utils.shuffleArray(features);
       window.utils.shuffleArray(photos);
       let locationX = window.utils.getRandomNumber(minWidth, maxWidth);
-      let locationY = window.utils.getRandomNumber(minHeight, maxHeight);
+      let locationY = window.utils.getRandomNumber(minHeight, maxHeight) + offsetYPin;
       let obj = {
         author: {
           avatar: avatars[i]
