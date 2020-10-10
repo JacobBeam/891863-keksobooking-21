@@ -8,8 +8,10 @@
   window.pin = {
 
     renderPin(array) {
+
       if (array.offer) {
         let newPin = mapPinTemplate.cloneNode(true);
+
 
         newPin.style.left = array.location.x - offsetXPin / 2 + `px`;
         newPin.style.top = array.location.y - offsetYPin + `px`;
@@ -21,7 +23,11 @@
         newPin.addObj = array;
 
         return newPin;
+      } else {
+        return undefined;
       }
+
+
     }
   };
 

@@ -6,7 +6,6 @@
     window.data = {
       arrayData: dataAds,
     };
-
   };
 
   let errorRequestHandler = function (errorMessage) {

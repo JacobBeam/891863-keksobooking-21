@@ -8,7 +8,9 @@
   let getPinsBlock = function (array) {
     let fragment = document.createDocumentFragment();
     for (let i = 0; i < array.length; i++) {
-      fragment.append(window.pin.renderPin(array[i]));
+      if (window.pin.renderPin(array[i])) {
+        fragment.append(window.pin.renderPin(array[i]));
+      }
     }
     return fragment;
   };
