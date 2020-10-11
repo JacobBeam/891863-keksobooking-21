@@ -4,10 +4,11 @@
   const filtersContainer = document.querySelector(`.map__filters-container`);
   const map = document.querySelector(`.map`);
   const pinsList = map.querySelector(`.map__pins`);
+  const pinsAmount = 5;
 
   let getPinsBlock = function (array) {
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i < array.length; i++) {
+    for (let i = 0; i < pinsAmount; i++) {
       if (window.pin.renderPin(array[i])) {
         fragment.append(window.pin.renderPin(array[i]));
       }
