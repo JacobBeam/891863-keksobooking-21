@@ -19,7 +19,18 @@
   let appendNewCard = function (evt) {
     let buttonPin = evt.target.closest(`.map__pin`);
     let buttonPinMain = evt.target.closest(`.map__pin--main`);
+
+
     if (buttonPin && !buttonPinMain) {
+
+      let onCardEscPress = function (evtEsc) {
+        window.utils.isEscEvent(evtEsc, closeCard);
+      };
+
+      let closeCard = function () {
+        renderNewCard.remove();
+        document.removeEventListener(`keydown`, onCardEscPress);
+      };
 
       // Проверка, есть ли открытая карточка
       let mapCard = map.querySelector(`.map__card`);
@@ -27,23 +38,19 @@
         mapCard.remove();
       }
 
+
       // Отрисовка новой карточки
       let renderNewCard = window.card.renderCard(buttonPin.addObj);
+
       filtersContainer.before(renderNewCard);
 
       let buttonCloseCard = renderNewCard.querySelector(`.popup__close`);
 
       buttonCloseCard.addEventListener(`click`, function () {
-        renderNewCard.remove();
+        closeCard();
       });
 
-      document.addEventListener(`keydown`, function (eventKey) {
-
-        if (eventKey.key === `Escape`) {
-          eventKey.preventDefault();
-          renderNewCard.remove();
-        }
-      });
+      document.addEventListener(`keydown`, onCardEscPress);
     }
   };
 
