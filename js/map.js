@@ -38,8 +38,9 @@
       });
 
       document.addEventListener(`keydown`, function (eventKey) {
-        evt.preventDefault();
+
         if (eventKey.key === `Escape`) {
+          eventKey.preventDefault();
           renderNewCard.remove();
         }
       });
@@ -51,6 +52,15 @@
     renderPins() {
       pinsList.append(getPinsBlock(window.data.arrayData));
     },
+    removePins() {
+      let pinsItem = pinsList.children;
+
+      for (let i = pinsItem.length - 1; i >= 0; i--) {
+        if (pinsItem[i].classList.contains(`map__pin`) && !pinsItem[i].classList.contains(`map__pin--main`)) {
+          pinsItem[i].remove();
+        }
+      }
+    },
     renderCardOnClick() {
       pinsList.addEventListener(`click`, function (evt) {
         appendNewCard(evt);
@@ -59,9 +69,16 @@
     renderCardOnEnter() {
       map.addEventListener(`keydown`, function (evt) {
         if (evt.key === `Enter`) {
+          evt.preventDefault();
           appendNewCard(evt);
         }
       });
+    },
+    removeCard() {
+      let card = map.querySelector(`.map__card`);
+      if (card) {
+        card.remove();
+      }
     }
   };
 
