@@ -3,12 +3,12 @@
 
   const map = document.querySelector(`.map`);
   const mapPinMain = map.querySelector(`.map__pin--main`);
-
-  let minWidthLocationPin = 0 - mapPinMain.offsetWidth / 2;
-  let maxWidthLocationPin = map.clientWidth - mapPinMain.offsetWidth / 2;
-  let minHeightLocationPin = 130;
+  const coordsMap = map.getBoundingClientRect();
+  const halfWidthMapPinMain = mapPinMain.offsetWidth / 2;
+  let minWidthLocationPin = 0 - halfWidthMapPinMain;
+  let maxWidthLocationPin = map.clientWidth - halfWidthMapPinMain;
+  let minHeightLocationPin = 130 + mapPinMain.offsetHeight;
   let maxHeightLocationPin = 630;
-
 
   mapPinMain.addEventListener(`mousedown`, function (evt) {
     evt.preventDefault();
@@ -31,24 +31,26 @@
         y: moveEvt.clientY
       };
 
-      if (mapPinMain.offsetTop - shift.y < minHeightLocationPin) {
-        mapPinMain.style.top = minHeightLocationPin;
-      } else if (mapPinMain.offsetTop - shift.y > maxHeightLocationPin) {
-        mapPinMain.style.top = maxHeightLocationPin;
+      if (moveEvt.clientY < minHeightLocationPin - pageYOffset) {
+        mapPinMain.style.top = minHeightLocationPin - pageYOffset;
+      } else if (moveEvt.clientY > maxHeightLocationPin - pageYOffset) {
+        mapPinMain.style.top = maxHeightLocationPin - pageYOffset;
       } else {
         mapPinMain.style.top = (mapPinMain.offsetTop - shift.y) + `px`;
       }
 
 
-      if (mapPinMain.offsetLeft - shift.x < minWidthLocationPin) {
+      if (moveEvt.clientX < coordsMap.left + halfWidthMapPinMain) {
         mapPinMain.style.left = minWidthLocationPin;
-      } else if (mapPinMain.offsetLeft - shift.x > maxWidthLocationPin) {
+
+      } else if (moveEvt.clientX > coordsMap.right) {
         mapPinMain.style.left = maxWidthLocationPin + `px`;
       } else {
         mapPinMain.style.left = (mapPinMain.offsetLeft - shift.x) + `px`;
       }
 
       window.form.getMainPinCoords();
+
     };
 
     let onMouseUp = function (upEvt) {
