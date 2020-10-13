@@ -1,14 +1,14 @@
 'use strict';
 (function () {
 
-  let successRequestHandler = function (dataAds) {
+  let successLoadRequestHandler = function (dataAds) {
 
     window.data = {
       arrayData: dataAds,
     };
   };
 
-  let errorRequestHandler = function (errorMessage) {
+  let errorLoadRequestHandler = function (errorMessage) {
     let node = document.createElement(`div`);
     node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
     node.style.position = `fixed`;
@@ -19,5 +19,5 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
-  window.backend.load(successRequestHandler, errorRequestHandler);
+  window.backend.load(successLoadRequestHandler, errorLoadRequestHandler);
 })();

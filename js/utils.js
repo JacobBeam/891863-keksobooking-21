@@ -12,6 +12,12 @@
         [array[i], array[j]] = [array[j], array[i]];
       }
       return array;
+    },
+    isEscEvent(evt, action) {
+      if (evt.key === `Escape`) {
+        evt.preventDefault();
+        action();
+      }
     }
   };
 })();

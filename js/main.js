@@ -9,9 +9,6 @@
   const mapFilterFieldsets = mapFilter.querySelectorAll(`fieldset`);
   const mapFilterSelects = mapFilter.querySelectorAll(`select`);
 
-  // Заполнение поля Адрес при неактивном состоянии страницы
-  window.form.getStartMainPinCoords();
-
   // Функция деактивации страницы
   let deactivationPage = function () {
     map.classList.add(`map--faded`);
@@ -28,6 +25,52 @@
     for (let select of mapFilterSelects) {
       select.setAttribute(`disabled`, `disabled`);
     }
+
+    // Активация страницы по ЛКМ
+    mapPinMain.addEventListener(`mousedown`, function (evt) {
+      evt.preventDefault();
+      if (evt.button === 0) {
+        // Активация
+        activationPage();
+
+        //  Добавление меток
+        window.map.renderPins();
+
+        //  Новые координаты для поля Адрес
+        window.form.getMainPinCoords();
+      }
+    }, {
+      once: true
+    });
+
+
+    // Активация страницы по Enter
+    mapPinMain.addEventListener(`keydown`, function (evt) {
+
+
+      if (evt.key === `Enter`) {
+        evt.preventDefault();
+        //  Активация
+        activationPage();
+
+        //  Рендер меток
+        window.map.renderPins();
+
+        //  Новые координаты для поля Адрес
+        window.form.getMainPinCoords();
+      }
+    }, {
+      once: true
+    });
+
+
+    // Заполнение поля Адрес при неактивном состоянии страницы
+    window.form.getStartMainPinCoords();
+
+    // Удаление меток и карточки
+
+    window.map.removePins();
+    window.map.removeCard();
   };
 
   deactivationPage();
@@ -49,45 +92,16 @@
     }
   };
 
-  // Активация страницы по ЛКМ
-  mapPinMain.addEventListener(`mousedown`, function (evt) {
-    evt.preventDefault();
-    if (evt.button === 0) {
-      // Активация
-      activationPage();
-
-      //  Добавление меток
-      window.map.renderPins();
-
-      //  Новые координаты для поля Адрес
-      window.form.getMainPinCoords();
-    }
-  }, {
-    once: true
-  });
-
-
-  // Активация страницы по Enter
-  mapPinMain.addEventListener(`keydown`, function (evt) {
-    evt.preventDefault();
-
-    if (evt.key === `Enter`) {
-      //  Активация
-      activationPage();
-
-      //  Рендер меток
-      window.map.renderPins();
-
-      //  Новые координаты для поля Адрес
-      window.form.getMainPinCoords();
-    }
-  }, {
-    once: true
-  });
 
   // Рендер карточки
 
   window.map.renderCardOnClick();
   window.map.renderCardOnEnter();
 
+
+  window.main = {
+    deactivationPage() {
+      deactivationPage();
+    }
+  };
 })();

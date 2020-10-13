@@ -1,12 +1,15 @@
 'use strict';
 (function () {
   const urlLoad = `https://21.javascript.pages.academy/keksobooking/data`;
+  const urlUpload = `https://21.javascript.pages.academy/keksobooking`;
   const statusCode = {
     OK: 200
   };
   const timeout = 10000;
 
   const requestGet = `GET`;
+  const requestPost = `POST`;
+
 
   let requestHtml = function (request, url, onLoad, onError, data) {
     let xhr = new XMLHttpRequest();
@@ -44,8 +47,10 @@
   window.backend = {
     load(onLoad, onError) {
       requestHtml(requestGet, urlLoad, onLoad, onError);
+    },
+    upload(data, onLoad, onError) {
+      requestHtml(requestPost, urlUpload, onLoad, onError, data);
     }
-
   };
 
 })();

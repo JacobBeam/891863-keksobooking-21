@@ -1,13 +1,25 @@
 'use strict';
 (function () {
 
-
-  // Деактивация формы при первом открытии
   const map = document.querySelector(`.map`);
   const adForm = document.querySelector(`.ad-form`);
   const addressInput = adForm.querySelector(`#address`);
   const mapPinMain = map.querySelector(`.map__pin--main`);
   const mapPinMainOffsetY = 80;
+
+  window.form = {
+
+    getStartMainPinCoords() {
+      addressInput.value =
+        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
+${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight / 2)}`;
+    },
+    getMainPinCoords() {
+      addressInput.value =
+        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
+${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
+    }
+  };
 
 
   // Валидация поля "Количество гостей" и "Количество комнат"
@@ -107,18 +119,55 @@
     timeinInput.value = timeoutInput.value;
   });
 
-  window.form = {
 
-    getStartMainPinCoords() {
-      addressInput.value =
-        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
-${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight / 2)}`;
-    },
-    getMainPinCoords() {
-      addressInput.value =
-        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
-${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
-    }
+  const successMessageTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  const errorMessageTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+
+  const mainTag = document.querySelector(`main`);
+
+  let successMessage = successMessageTemplate.cloneNode(true);
+  let errorMessage = errorMessageTemplate.cloneNode(true);
+
+
+  let onMessageEscPress = function (evt) {
+    window.utils.isEscEvent(evt, closeMessage);
   };
+
+  let onMessageClick = function (evt) {
+    evt.preventDefault();
+    closeMessage();
+  };
+
+  let closeMessage = function () {
+    successMessage.remove();
+    errorMessage.remove();
+
+    document.removeEventListener(`keydown`, onMessageEscPress);
+    document.removeEventListener(`click`, onMessageClick);
+  };
+
+  let openMessage = function (message) {
+    mainTag.append(message);
+    document.addEventListener(`keydown`, onMessageEscPress);
+    message.addEventListener(`click`, onMessageClick);
+  };
+
+
+  let successUploadRequestHandler = function () {
+    openMessage(successMessage);
+    adForm.reset();
+    window.main.deactivationPage();
+  };
+
+
+  let errorUploadRequestHandler = function () {
+    openMessage(errorMessage);
+  };
+
+
+  adForm.addEventListener(`submit`, function (evt) {
+    evt.preventDefault();
+    window.backend.upload(new FormData(adForm), successUploadRequestHandler, errorUploadRequestHandler);
+  });
 
 })();
