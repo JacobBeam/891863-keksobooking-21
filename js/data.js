@@ -1,11 +1,20 @@
 'use strict';
 (function () {
 
+  const pinsAmount = 5;
+  const filterResetValue = `any`;
+  let downloadedData;
+
+  window.data = {
+    arrayData: [],
+    pinsAmount
+  };
+
   let successLoadRequestHandler = function (dataAds) {
 
-    window.data = {
-      arrayData: dataAds,
-    };
+    window.data.arrayData = dataAds;
+    downloadedData = dataAds;
+
   };
 
   let errorLoadRequestHandler = function (errorMessage) {
@@ -20,4 +29,27 @@
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
   window.backend.load(successLoadRequestHandler, errorLoadRequestHandler);
+
+
+  const map = document.querySelector(`.map`);
+  const housingTypeSelect = map.querySelector(`#housing-type`);
+
+  housingTypeSelect.addEventListener(`change`, function (evt) {
+
+    let value = evt.target.value;
+
+    if (value === filterResetValue) {
+      window.data.arrayData = downloadedData;
+    } else {
+      let smaeHousingType = downloadedData.filter(function (ad) {
+        return ad.offer.type === value;
+      });
+      window.data.arrayData = smaeHousingType;
+    }
+    window.map.removePins();
+    window.map.removeCard();
+    window.map.renderPins();
+  });
+
+
 })();

@@ -30,11 +30,12 @@
     mapPinMain.addEventListener(`mousedown`, function (evt) {
       evt.preventDefault();
       if (evt.button === 0) {
-        // Активация
-        activationPage();
 
         //  Добавление меток
         window.map.renderPins();
+
+        // Активация
+        activationPage();
 
         //  Новые координаты для поля Адрес
         window.form.getMainPinCoords();
@@ -50,12 +51,12 @@
 
       if (evt.key === `Enter`) {
         evt.preventDefault();
-        //  Активация
-        activationPage();
 
         //  Рендер меток
         window.map.renderPins();
 
+        //  Активация
+        activationPage();
         //  Новые координаты для поля Адрес
         window.form.getMainPinCoords();
       }
@@ -83,12 +84,17 @@
     for (let fieldset of adFormFieldsets) {
       fieldset.removeAttribute(`disabled`);
     }
-    for (let fieldset of mapFilterFieldsets) {
-      fieldset.removeAttribute(`disabled`);
-    }
 
-    for (let select of mapFilterSelects) {
-      select.removeAttribute(`disabled`);
+    let buttonPin = map.querySelectorAll(`.map__pin`);
+
+    if (buttonPin.length > 1) {
+      for (let fieldset of mapFilterFieldsets) {
+        fieldset.removeAttribute(`disabled`);
+      }
+
+      for (let select of mapFilterSelects) {
+        select.removeAttribute(`disabled`);
+      }
     }
   };
 
