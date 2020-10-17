@@ -6,9 +6,9 @@
   const pinsList = map.querySelector(`.map__pins`);
 
 
-  let getPinsBlock = function (data) {
+  let getPinsBlock = (data) => {
     let fragment = document.createDocumentFragment();
-    let takeNumber = data.length > window.data.pinsAmount ? window.data.pinsAmount : data.length;
+    let takeNumber = data.length > window.data.MAX_PINS_AMOUNT ? window.data.MAX_PINS_AMOUNT : data.length;
 
     for (let i = 0; i < takeNumber; i++) {
       if (window.pin.renderPin(data[i])) {
@@ -20,16 +20,16 @@
 
   let renderNewCard = null;
 
-  let closeCard = function () {
+  let closeCard = () => {
     renderNewCard.remove();
     document.removeEventListener(`keydown`, onCardEscPress);
   };
 
-  let onCardEscPress = function (evtEsc) {
+  let onCardEscPress = (evtEsc) => {
     window.utils.isEscEvent(evtEsc, closeCard);
   };
 
-  let appendNewCard = function (evt) {
+  let appendNewCard = (evt) => {
     let buttonPin = evt.target.closest(`.map__pin`);
     let buttonPinMain = evt.target.closest(`.map__pin--main`);
 
@@ -49,7 +49,7 @@
 
       let buttonCloseCard = renderNewCard.querySelector(`.popup__close`);
 
-      buttonCloseCard.addEventListener(`click`, function () {
+      buttonCloseCard.addEventListener(`click`, () => {
         closeCard();
       });
 
@@ -60,7 +60,7 @@
 
   window.map = {
     renderPins() {
-      pinsList.append(getPinsBlock(window.data.arrayData));
+      pinsList.append(getPinsBlock(window.data.ads));
     },
     removePins() {
       let pinsItem = pinsList.children;
@@ -72,12 +72,12 @@
       }
     },
     renderCardOnClick() {
-      pinsList.addEventListener(`click`, function (evt) {
+      pinsList.addEventListener(`click`, (evt) => {
         appendNewCard(evt);
       });
     },
     renderCardOnEnter() {
-      map.addEventListener(`keydown`, function (evt) {
+      map.addEventListener(`keydown`, (evt) => {
         if (evt.key === `Enter`) {
           evt.preventDefault();
           appendNewCard(evt);

@@ -10,7 +10,7 @@
   const mapFilterSelects = mapFilter.querySelectorAll(`select`);
 
   // Функция деактивации страницы
-  let deactivationPage = function () {
+  let deactivationPage = () => {
     map.classList.add(`map--faded`);
     adForm.classList.add(`ad-form--disabled`);
 
@@ -27,7 +27,7 @@
     }
 
     // Активация страницы по ЛКМ
-    mapPinMain.addEventListener(`mousedown`, function (evt) {
+    mapPinMain.addEventListener(`mousedown`, (evt) => {
       evt.preventDefault();
       if (evt.button === 0) {
 
@@ -46,7 +46,7 @@
 
 
     // Активация страницы по Enter
-    mapPinMain.addEventListener(`keydown`, function (evt) {
+    mapPinMain.addEventListener(`keydown`, (evt) => {
 
 
       if (evt.key === `Enter`) {
@@ -77,7 +77,7 @@
   deactivationPage();
 
   // Функция активации страницы
-  let activationPage = function () {
+  let activationPage = () => {
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
 

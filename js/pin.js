@@ -2,8 +2,8 @@
 (function () {
 
   const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
-  const offsetXPin = 50;
-  const offsetYPin = 70;
+  const OFFSET_X_PIN = 50;
+  const OFFSET_Y_PIN = 70;
 
   window.pin = {
 
@@ -12,9 +12,8 @@
       if (array.offer) {
         let newPin = mapPinTemplate.cloneNode(true);
 
-
-        newPin.style.left = array.location.x - offsetXPin / 2 + `px`;
-        newPin.style.top = array.location.y - offsetYPin + `px`;
+        newPin.style.left = array.location.x - OFFSET_X_PIN / 2 + `px`;
+        newPin.style.top = array.location.y - OFFSET_Y_PIN + `px`;
 
         let avatar = newPin.querySelector(`img`);
         avatar.src = array.author.avatar;
@@ -23,10 +22,8 @@
         newPin.addObj = array;
 
         return newPin;
-      } else {
-        return undefined;
       }
-
+      return undefined;
 
     }
   };

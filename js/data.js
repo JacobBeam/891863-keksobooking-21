@@ -1,23 +1,24 @@
 'use strict';
 (function () {
 
-  const pinsAmount = 5;
-  const filterResetValue = `any`;
+  const MAX_PINS_AMOUNT = 5;
+  const FILTER_RESET_VALUE = `any`;
+  const mapFilters = document.querySelector(`.map__filters`);
+  const housingTypeSelect = mapFilters.querySelector(`#housing-type`);
+
   let downloadedData;
 
   window.data = {
-    arrayData: [],
-    pinsAmount
+    ads: [],
+    MAX_PINS_AMOUNT
   };
 
-  let successLoadRequestHandler = function (dataAds) {
-
-    window.data.arrayData = dataAds;
+  let successLoadRequestHandler = (dataAds) => {
+    window.data.ads = dataAds;
     downloadedData = dataAds;
-
   };
 
-  let errorLoadRequestHandler = function (errorMessage) {
+  let errorLoadRequestHandler = (errorMessage) => {
     let node = document.createElement(`div`);
     node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
     node.style.position = `fixed`;
@@ -28,28 +29,23 @@
     node.textContent = errorMessage;
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
+
   window.backend.load(successLoadRequestHandler, errorLoadRequestHandler);
 
-
-  const map = document.querySelector(`.map`);
-  const housingTypeSelect = map.querySelector(`#housing-type`);
-
-  housingTypeSelect.addEventListener(`change`, function (evt) {
+  housingTypeSelect.addEventListener(`change`, (evt) => {
 
     let value = evt.target.value;
 
-    if (value === filterResetValue) {
-      window.data.arrayData = downloadedData;
+    if (value === FILTER_RESET_VALUE) {
+      window.data.ads = downloadedData;
     } else {
-      let smaeHousingType = downloadedData.filter(function (ad) {
+      let smaeHousingType = downloadedData.filter((ad) => {
         return ad.offer.type === value;
       });
-      window.data.arrayData = smaeHousingType;
+      window.data.ads = smaeHousingType;
     }
     window.map.removePins();
     window.map.removeCard();
     window.map.renderPins();
   });
-
-
 })();

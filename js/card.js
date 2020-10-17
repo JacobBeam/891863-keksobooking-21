@@ -3,7 +3,7 @@
 
   const cardTemplate = document.querySelector(`#card`).content.querySelector(`.popup`);
 
-  const houseTypeRus = {
+  const houseTypeMap = {
     flat: `Квартира`,
     bungalow: `Бунгало`,
     house: `Дом`,
@@ -38,7 +38,7 @@
 
       let type = newCard.querySelector(`.popup__type`);
       if (array.offer.type) {
-        type.textContent = houseTypeRus[array.offer.type];
+        type.textContent = houseTypeMap[array.offer.type];
       } else {
         type.remove();
       }
@@ -46,12 +46,18 @@
       let capacity = newCard.querySelector(`.popup__text--capacity`);
       let roomWord = ``;
       if (array.offer.rooms) {
-        if (array.offer.rooms === 1) {
-          roomWord = `${array.offer.rooms} комната`;
-        } else if (array.offer.rooms === 100) {
-          roomWord = `${array.offer.rooms} комнат`;
-        } else {
-          roomWord = `${array.offer.rooms} комнаты`;
+        switch (array.offer.rooms) {
+          case 1:
+            roomWord = `${array.offer.rooms} комната`;
+            break;
+          case 35:
+            roomWord = `${array.offer.rooms} комнат`;
+            break;
+          case 100:
+            roomWord = `${array.offer.rooms} комнат`;
+            break;
+          default:
+            roomWord = `${array.offer.rooms} комнаты`;
         }
       }
 
@@ -74,11 +80,12 @@
       let features = newCard.querySelector(`.popup__features`);
       features.innerHTML = ``;
       if (array.offer.features) {
-        for (let feature of array.offer.features) {
+        array.offer.features.forEach((feature) => {
           let newFeatures = document.createElement(`li`);
           newFeatures.classList.add(`popup__feature`, `popup__feature--${feature}`);
           features.append(newFeatures);
-        }
+        });
+
       } else {
         features.remove();
       }
@@ -95,11 +102,13 @@
       photos.innerHTML = ``;
 
       if (array.offer.photos) {
-        for (let photo of array.offer.photos) {
+
+        array.offer.photos.forEach((photo) => {
           let newPhoto = photoPattern.cloneNode(true);
           newPhoto.src = photo;
           photos.append(newPhoto);
-        }
+        });
+
       } else {
         photos.remove();
       }
