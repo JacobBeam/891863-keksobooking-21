@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  const DEBOUNCE_INTERVAL = 500;
+  let lastTimeout;
 
   window.utils = {
     getRandomNumber(min, max) {
@@ -18,6 +20,12 @@
         evt.preventDefault();
         action();
       }
+    },
+    debounce(cb) {
+      if (lastTimeout) {
+        window.clearTimeout(lastTimeout);
+      }
+      lastTimeout = window.setTimeout(cb, DEBOUNCE_INTERVAL);
     }
   };
 })();
