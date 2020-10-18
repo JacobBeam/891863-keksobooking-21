@@ -3,7 +3,9 @@
 
   const MAX_PINS_AMOUNT = 5;
   const FILTER_RESET_VALUE = `any`;
-  const mapFilters = document.querySelector(`.map__filters`);
+  const map = document.querySelector(`.map`);
+  const mapFilters = map.querySelector(`.map__filters`);
+  const mapFilterSelects = mapFilters.querySelectorAll(`select`);
   const housingTypeSelect = mapFilters.querySelector(`#housing-type`);
   const housingPriceSelect = mapFilters.querySelector(`#housing-price`);
   const housingRoomseSelect = mapFilters.querySelector(`#housing-rooms`);
@@ -17,31 +19,45 @@
     low: `low`
   };
 
-  let downloadedData;
-
   window.data = {
     ads: [],
-    MAX_PINS_AMOUNT
+    maxPinsAmount: MAX_PINS_AMOUNT,
+    downloadedData: null,
+    successLoadRequestHandler(dataAds) {
+      window.data.ads = dataAds;
+      window.data.downloadedData = dataAds;
+      window.map.renderPins();
+      activationMapFilters();
+    },
+    errorLoadRequestHandler(errorMessage) {
+      let node = document.createElement(`div`);
+      node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
+      node.style.position = `fixed`;
+      node.style.left = 0;
+      node.style.right = 0;
+      node.style.fontSize = `30px`;
+
+      node.textContent = errorMessage;
+      document.body.insertAdjacentElement(`afterbegin`, node);
+    }
   };
 
-  let successLoadRequestHandler = (dataAds) => {
-    window.data.ads = dataAds;
-    downloadedData = dataAds;
+
+  let activationMapFilters = () => {
+
+    let buttonPin = map.querySelectorAll(`.map__pin`);
+    if (buttonPin.length > 1) {
+      for (let checkbox of checkboxes) {
+
+        checkbox.removeAttribute(`disabled`);
+      }
+
+      for (let select of mapFilterSelects) {
+        select.removeAttribute(`disabled`);
+      }
+    }
   };
 
-  let errorLoadRequestHandler = (errorMessage) => {
-    let node = document.createElement(`div`);
-    node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
-    node.style.position = `fixed`;
-    node.style.left = 0;
-    node.style.right = 0;
-    node.style.fontSize = `30px`;
-
-    node.textContent = errorMessage;
-    document.body.insertAdjacentElement(`afterbegin`, node);
-  };
-
-  window.backend.load(successLoadRequestHandler, errorLoadRequestHandler);
 
   let searchMatches = (where, what) => {
     let isMatches = true;
@@ -72,7 +88,7 @@
       }
     }
 
-    let filteredData = downloadedData.filter((ad) => {
+    let filteredData = window.data.downloadedData.filter((ad) => {
 
       let price;
       if (ad.offer.price > priceMap.boundHighValue) {
