@@ -4,34 +4,37 @@
   const filtersContainer = document.querySelector(`.map__filters-container`);
   const map = document.querySelector(`.map`);
   const pinsList = map.querySelector(`.map__pins`);
-  const pinsAmount = 5;
 
-  let getPinsBlock = function (array) {
+
+  let getPinsBlock = (data) => {
     let fragment = document.createDocumentFragment();
-    for (let i = 0; i < pinsAmount; i++) {
-      if (window.pin.renderPin(array[i])) {
-        fragment.append(window.pin.renderPin(array[i]));
+    let takeNumber = data.length > window.data.MAX_PINS_AMOUNT ? window.data.MAX_PINS_AMOUNT : data.length;
+
+    for (let i = 0; i < takeNumber; i++) {
+      if (window.pin.renderPin(data[i])) {
+        fragment.append(window.pin.renderPin(data[i]));
       }
     }
     return fragment;
   };
 
-  let appendNewCard = function (evt) {
+  let renderNewCard = null;
+
+  let closeCard = () => {
+    renderNewCard.remove();
+    document.removeEventListener(`keydown`, onCardEscPress);
+  };
+
+  let onCardEscPress = (evtEsc) => {
+    window.utils.isEscEvent(evtEsc, closeCard);
+  };
+
+  let appendNewCard = (evt) => {
     let buttonPin = evt.target.closest(`.map__pin`);
     let buttonPinMain = evt.target.closest(`.map__pin--main`);
 
 
     if (buttonPin && !buttonPinMain) {
-
-      let onCardEscPress = function (evtEsc) {
-        window.utils.isEscEvent(evtEsc, closeCard);
-      };
-
-      let closeCard = function () {
-        renderNewCard.remove();
-        document.removeEventListener(`keydown`, onCardEscPress);
-      };
-
       // Проверка, есть ли открытая карточка
       let mapCard = map.querySelector(`.map__card`);
       if (mapCard) {
@@ -40,13 +43,13 @@
 
 
       // Отрисовка новой карточки
-      let renderNewCard = window.card.renderCard(buttonPin.addObj);
+      renderNewCard = window.card.renderCard(buttonPin.addObj);
 
       filtersContainer.before(renderNewCard);
 
       let buttonCloseCard = renderNewCard.querySelector(`.popup__close`);
 
-      buttonCloseCard.addEventListener(`click`, function () {
+      buttonCloseCard.addEventListener(`click`, () => {
         closeCard();
       });
 
@@ -57,7 +60,7 @@
 
   window.map = {
     renderPins() {
-      pinsList.append(getPinsBlock(window.data.arrayData));
+      pinsList.append(getPinsBlock(window.data.ads));
     },
     removePins() {
       let pinsItem = pinsList.children;
@@ -69,12 +72,12 @@
       }
     },
     renderCardOnClick() {
-      pinsList.addEventListener(`click`, function (evt) {
+      pinsList.addEventListener(`click`, (evt) => {
         appendNewCard(evt);
       });
     },
     renderCardOnEnter() {
-      map.addEventListener(`keydown`, function (evt) {
+      map.addEventListener(`keydown`, (evt) => {
         if (evt.key === `Enter`) {
           evt.preventDefault();
           appendNewCard(evt);
@@ -85,6 +88,7 @@
       let card = map.querySelector(`.map__card`);
       if (card) {
         card.remove();
+        document.removeEventListener(`keydown`, onCardEscPress);
       }
     }
   };

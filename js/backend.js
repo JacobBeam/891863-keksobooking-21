@@ -1,34 +1,37 @@
 'use strict';
 (function () {
-  const urlLoad = `https://21.javascript.pages.academy/keksobooking/data`;
-  const urlUpload = `https://21.javascript.pages.academy/keksobooking`;
-  const statusCode = {
+  const URL_LOAD = `https://21.javascript.pages.academy/keksobooking/data`;
+  const URL_UPLOAD = `https://21.javascript.pages.academy/keksobooking`;
+  const TIMEOUT = 10000;
+
+  const StatusCode = {
     OK: 200
   };
-  const timeout = 10000;
 
-  const requestGet = `GET`;
-  const requestPost = `POST`;
+  const Request = {
+    GET: `GET`,
+    POST: `POST`
+  };
 
 
-  let requestHtml = function (request, url, onLoad, onError, data) {
+  let requestOnServer = (request, url, onLoad, onError, data) => {
     let xhr = new XMLHttpRequest();
     xhr.responseType = `json`;
 
-    xhr.addEventListener(`load`, function () {
-      if (xhr.status === statusCode.OK) {
+    xhr.addEventListener(`load`, () => {
+      if (xhr.status === StatusCode.OK) {
         onLoad(xhr.response);
       } else {
         onError(`Произошла ошибка. Статус ответа: ${xhr.status}`);
       }
     });
 
-    xhr.addEventListener(`error`, function () {
+    xhr.addEventListener(`error`, () => {
       onError(`Произошла ошибка соединения`);
     });
 
-    xhr.addEventListener(`timeout`, function () {
-      onError(`Запрос не успел выполниться за ${timeout} мс`);
+    xhr.addEventListener(`timeout`, () => {
+      onError(`Запрос не успел выполниться за ${TIMEOUT} мс`);
     });
 
     xhr.open(request, url);
@@ -46,10 +49,10 @@
 
   window.backend = {
     load(onLoad, onError) {
-      requestHtml(requestGet, urlLoad, onLoad, onError);
+      requestOnServer(Request.GET, URL_LOAD, onLoad, onError);
     },
     upload(data, onLoad, onError) {
-      requestHtml(requestPost, urlUpload, onLoad, onError, data);
+      requestOnServer(Request.POST, URL_UPLOAD, onLoad, onError, data);
     }
   };
 

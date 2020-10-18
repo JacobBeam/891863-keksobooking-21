@@ -10,7 +10,7 @@
   const mapFilterSelects = mapFilter.querySelectorAll(`select`);
 
   // Функция деактивации страницы
-  let deactivationPage = function () {
+  let deactivationPage = () => {
     map.classList.add(`map--faded`);
     adForm.classList.add(`ad-form--disabled`);
 
@@ -27,14 +27,15 @@
     }
 
     // Активация страницы по ЛКМ
-    mapPinMain.addEventListener(`mousedown`, function (evt) {
+    mapPinMain.addEventListener(`mousedown`, (evt) => {
       evt.preventDefault();
       if (evt.button === 0) {
-        // Активация
-        activationPage();
 
         //  Добавление меток
         window.map.renderPins();
+
+        // Активация
+        activationPage();
 
         //  Новые координаты для поля Адрес
         window.form.getMainPinCoords();
@@ -45,17 +46,17 @@
 
 
     // Активация страницы по Enter
-    mapPinMain.addEventListener(`keydown`, function (evt) {
+    mapPinMain.addEventListener(`keydown`, (evt) => {
 
 
       if (evt.key === `Enter`) {
         evt.preventDefault();
-        //  Активация
-        activationPage();
 
         //  Рендер меток
         window.map.renderPins();
 
+        //  Активация
+        activationPage();
         //  Новые координаты для поля Адрес
         window.form.getMainPinCoords();
       }
@@ -76,19 +77,24 @@
   deactivationPage();
 
   // Функция активации страницы
-  let activationPage = function () {
+  let activationPage = () => {
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
 
     for (let fieldset of adFormFieldsets) {
       fieldset.removeAttribute(`disabled`);
     }
-    for (let fieldset of mapFilterFieldsets) {
-      fieldset.removeAttribute(`disabled`);
-    }
 
-    for (let select of mapFilterSelects) {
-      select.removeAttribute(`disabled`);
+    let buttonPin = map.querySelectorAll(`.map__pin`);
+
+    if (buttonPin.length > 1) {
+      for (let fieldset of mapFilterFieldsets) {
+        fieldset.removeAttribute(`disabled`);
+      }
+
+      for (let select of mapFilterSelects) {
+        select.removeAttribute(`disabled`);
+      }
     }
   };
 

@@ -1,38 +1,63 @@
 'use strict';
 (function () {
-
   const map = document.querySelector(`.map`);
+  const mapPinMain = map.querySelector(`.map__pin--main`);
+
+  const MAP_PIN_MAIN_OFFSET_Y = 80;
+  const HALF_WIDTH_MAP_PIN_MAIN = mapPinMain.offsetWidth / 2;
+  const HALF_HEIGHT_MAP_PIN_MAIN = mapPinMain.offsetHeight / 2;
+
   const adForm = document.querySelector(`.ad-form`);
   const addressInput = adForm.querySelector(`#address`);
-  const mapPinMain = map.querySelector(`.map__pin--main`);
-  const mapPinMainOffsetY = 80;
+
+  const roomNumberInput = adForm.querySelector(`#room_number`);
+  const capacityInput = adForm.querySelector(`#capacity`);
+  const AMOUNT_ROOM_NOT_FOR_GUEST = 100;
+  const VALUE_NOT_FOR_GUEST = 0;
+
+  const titleInput = adForm.querySelector(`#title`);
+  const maxTitleLength = titleInput.getAttribute(`maxlength`);
+  const minTitleLength = titleInput.getAttribute(`minlength`);
+
+  const priceInput = adForm.querySelector(`#price`);
+  const typeHouseInput = adForm.querySelector(`#type`);
+  const minPricePerNightMap = {
+    bungalow: 0,
+    flat: 1000,
+    house: 5000,
+    palace: 10000
+  };
 
   window.form = {
 
     getStartMainPinCoords() {
       addressInput.value =
-        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
-${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMain.offsetHeight / 2)}`;
+        `${Math.round(parseInt(mapPinMain.style.left, 10) + HALF_WIDTH_MAP_PIN_MAIN)},
+${Math.round(parseInt((mapPinMain.style.top), 10) + HALF_HEIGHT_MAP_PIN_MAIN)}`;
     },
     getMainPinCoords() {
       addressInput.value =
-        `${Math.round(parseInt(mapPinMain.style.left, 10) + mapPinMain.offsetWidth / 2)},
-${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
+        `${Math.round(parseInt(mapPinMain.style.left, 10) + HALF_WIDTH_MAP_PIN_MAIN)},
+${Math.round(parseInt((mapPinMain.style.top), 10) + MAP_PIN_MAIN_OFFSET_Y)}`;
     }
   };
 
+  const timeinInput = adForm.querySelector(`#timein`);
+  const timeoutInput = adForm.querySelector(`#timeout`);
+
+  const successMessageTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
+  const errorMessageTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
+  const mainTag = document.querySelector(`main`);
 
   // Валидация поля "Количество гостей" и "Количество комнат"
-  const roomNumberInput = adForm.querySelector(`#room_number`);
-  const capacityInput = adForm.querySelector(`#capacity`);
 
-  let validityCapacityInput = function () {
+  let validationCapacityInput = () => {
     let roomValue = roomNumberInput.value;
     let capacityValue = capacityInput.value;
 
-    if (Number(roomValue) === 100 && Number(capacityValue) !== 0) {
+    if (Number(roomValue) === AMOUNT_ROOM_NOT_FOR_GUEST && Number(capacityValue) !== VALUE_NOT_FOR_GUEST) {
       capacityInput.setCustomValidity(`Для выбранного значения Количество комнат: "100 комнат" подходит только вариант "Не для гостей"`);
-    } else if (Number(capacityValue) === 0 && Number(roomValue) !== 100) {
+    } else if (Number(capacityValue) === VALUE_NOT_FOR_GUEST && Number(roomValue) !== AMOUNT_ROOM_NOT_FOR_GUEST) {
       capacityInput.setCustomValidity(`Вариант "Не для гостей" подходит только для "100 комнат"`);
     } else if (Number(roomValue) < Number(capacityValue)) {
       capacityInput.setCustomValidity(`Количество гостей не соответствует количеству комнат. Для данного варианта количество гостей не должно превышать: ${Number(roomValue)} `);
@@ -42,20 +67,17 @@ ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
     capacityInput.reportValidity();
   };
 
-  capacityInput.addEventListener(`change`, function () {
-    validityCapacityInput();
+  capacityInput.addEventListener(`change`, () => {
+    validationCapacityInput();
   });
 
-  roomNumberInput.addEventListener(`change`, function () {
-    validityCapacityInput();
+  roomNumberInput.addEventListener(`change`, () => {
+    validationCapacityInput();
   });
 
   // Валидация поля "Заголовок "
-  const titleInput = adForm.querySelector(`#title`);
-  const maxTitleLength = titleInput.getAttribute(`maxlength`);
-  const minTitleLength = titleInput.getAttribute(`minlength`);
 
-  titleInput.addEventListener(`input`, function () {
+  titleInput.addEventListener(`input`, () => {
     let valueLength = titleInput.value.length;
 
     if (valueLength < minTitleLength) {
@@ -72,21 +94,11 @@ ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
 
   // Валидация полей "Цена за ночь" и "Тип жилья"
 
-  const priceInput = adForm.querySelector(`#price`);
-  const typeHouseInput = adForm.querySelector(`#type`);
-
-  const minPricePerNight = {
-    bungalow: 0,
-    flat: 1000,
-    house: 5000,
-    palace: 10000
-  };
-
-  let validityPriceInput = function () {
+  let validationPriceInput = () => {
     let selectedTypeHouse = typeHouseInput.options[typeHouseInput.selectedIndex];
 
-    if (priceInput.value < minPricePerNight[typeHouseInput.value]) {
-      priceInput.setCustomValidity(`Минимальная цена за жилье класса "${selectedTypeHouse.textContent}": ${minPricePerNight[typeHouseInput.value]}`);
+    if (priceInput.value < minPricePerNightMap[typeHouseInput.value]) {
+      priceInput.setCustomValidity(`Минимальная цена за жилье класса "${selectedTypeHouse.textContent}": ${minPricePerNightMap[typeHouseInput.value]}`);
     } else {
       priceInput.setCustomValidity(``);
     }
@@ -94,51 +106,41 @@ ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
     priceInput.reportValidity();
   };
 
-  priceInput.addEventListener(`input`, function () {
-    validityPriceInput();
+  priceInput.addEventListener(`input`, () => {
+    validationPriceInput();
   });
 
-  typeHouseInput.addEventListener(`change`, function () {
-    priceInput.setAttribute(`min`, minPricePerNight[typeHouseInput.value]);
-    priceInput.setAttribute(`placeholder`, minPricePerNight[typeHouseInput.value]);
+  typeHouseInput.addEventListener(`change`, () => {
+    priceInput.setAttribute(`min`, minPricePerNightMap[typeHouseInput.value]);
+    priceInput.setAttribute(`placeholder`, minPricePerNightMap[typeHouseInput.value]);
 
-    validityPriceInput();
+    validationPriceInput();
   });
 
   // Валидация полей "Время заезда" и "Время выезда"
 
-  const timeinInput = adForm.querySelector(`#timein`);
-  const timeoutInput = adForm.querySelector(`#timeout`);
-
-
-  timeinInput.addEventListener(`change`, function () {
+  timeinInput.addEventListener(`change`, () => {
     timeoutInput.value = timeinInput.value;
   });
 
-  timeoutInput.addEventListener(`change`, function () {
+  timeoutInput.addEventListener(`change`, () => {
     timeinInput.value = timeoutInput.value;
   });
-
-
-  const successMessageTemplate = document.querySelector(`#success`).content.querySelector(`.success`);
-  const errorMessageTemplate = document.querySelector(`#error`).content.querySelector(`.error`);
-
-  const mainTag = document.querySelector(`main`);
 
   let successMessage = successMessageTemplate.cloneNode(true);
   let errorMessage = errorMessageTemplate.cloneNode(true);
 
 
-  let onMessageEscPress = function (evt) {
+  let onMessageEscPress = (evt) => {
     window.utils.isEscEvent(evt, closeMessage);
   };
 
-  let onMessageClick = function (evt) {
+  let onMessageClick = (evt) => {
     evt.preventDefault();
     closeMessage();
   };
 
-  let closeMessage = function () {
+  let closeMessage = () => {
     successMessage.remove();
     errorMessage.remove();
 
@@ -146,26 +148,26 @@ ${Math.round(parseInt((mapPinMain.style.top), 10) + mapPinMainOffsetY)}`;
     document.removeEventListener(`click`, onMessageClick);
   };
 
-  let openMessage = function (message) {
+  let openMessage = (message) => {
     mainTag.append(message);
     document.addEventListener(`keydown`, onMessageEscPress);
     message.addEventListener(`click`, onMessageClick);
   };
 
 
-  let successUploadRequestHandler = function () {
+  let successUploadRequestHandler = () => {
     openMessage(successMessage);
     adForm.reset();
     window.main.deactivationPage();
   };
 
 
-  let errorUploadRequestHandler = function () {
+  let errorUploadRequestHandler = () => {
     openMessage(errorMessage);
   };
 
 
-  adForm.addEventListener(`submit`, function (evt) {
+  adForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
     window.backend.upload(new FormData(adForm), successUploadRequestHandler, errorUploadRequestHandler);
   });
