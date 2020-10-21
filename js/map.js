@@ -8,7 +8,7 @@
 
   let getPinsBlock = (data) => {
     let fragment = document.createDocumentFragment();
-    let takeNumber = data.length > window.data.MAX_PINS_AMOUNT ? window.data.MAX_PINS_AMOUNT : data.length;
+    let takeNumber = data.length > window.data.maxPinsAmount ? window.data.maxPinsAmount : data.length;
 
     for (let i = 0; i < takeNumber; i++) {
       if (window.pin.renderPin(data[i])) {

@@ -9,6 +9,7 @@
 
   const adForm = document.querySelector(`.ad-form`);
   const addressInput = adForm.querySelector(`#address`);
+  const resetForm = document.querySelector(`.ad-form__reset`);
 
   const roomNumberInput = adForm.querySelector(`#room_number`);
   const capacityInput = adForm.querySelector(`#capacity`);
@@ -172,4 +173,10 @@ ${Math.round(parseInt((mapPinMain.style.top), 10) + MAP_PIN_MAIN_OFFSET_Y)}`;
     window.backend.upload(new FormData(adForm), successUploadRequestHandler, errorUploadRequestHandler);
   });
 
+
+  resetForm.addEventListener(`click`, (evt) => {
+    evt.preventDefault();
+    adForm.reset();
+    window.main.deactivationPage();
+  });
 })();

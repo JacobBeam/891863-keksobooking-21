@@ -1,13 +1,15 @@
 'use strict';
 (function () {
   // Заполнение поля Адрес при неактивном состоянии страницы
+  const FILTER_RESET_VALUE = `any`;
   const map = document.querySelector(`.map`);
   const mapPinMain = map.querySelector(`.map__pin--main`);
   const adForm = document.querySelector(`.ad-form`);
-  const mapFilter = document.querySelector(`.map__filters`);
+  const mapFilters = document.querySelector(`.map__filters`);
   const adFormFieldsets = adForm.querySelectorAll(`fieldset`);
-  const mapFilterFieldsets = mapFilter.querySelectorAll(`fieldset`);
-  const mapFilterSelects = mapFilter.querySelectorAll(`select`);
+  const mapFilterSelects = mapFilters.querySelectorAll(`select`);
+  const checkboxes = mapFilters.querySelectorAll(`input[type="checkbox"]`);
+
 
   // Функция деактивации страницы
   let deactivationPage = () => {
@@ -18,22 +20,21 @@
       fieldset.setAttribute(`disabled`, `disabled`);
     }
 
-    for (let fieldset of mapFilterFieldsets) {
-      fieldset.setAttribute(`disabled`, `disabled`);
+    for (let checkbox of checkboxes) {
+      checkbox.checked = false;
+      checkbox.setAttribute(`disabled`, `disabled`);
     }
 
     for (let select of mapFilterSelects) {
+      select.value = FILTER_RESET_VALUE;
       select.setAttribute(`disabled`, `disabled`);
     }
+
 
     // Активация страницы по ЛКМ
     mapPinMain.addEventListener(`mousedown`, (evt) => {
       evt.preventDefault();
       if (evt.button === 0) {
-
-        //  Добавление меток
-        window.map.renderPins();
-
         // Активация
         activationPage();
 
@@ -51,12 +52,9 @@
 
       if (evt.key === `Enter`) {
         evt.preventDefault();
-
-        //  Рендер меток
-        window.map.renderPins();
-
         //  Активация
         activationPage();
+
         //  Новые координаты для поля Адрес
         window.form.getMainPinCoords();
       }
@@ -78,26 +76,15 @@
 
   // Функция активации страницы
   let activationPage = () => {
+    window.backend.load(window.data.successLoadRequestHandler, window.data.errorLoadRequestHandler);
+
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);
 
     for (let fieldset of adFormFieldsets) {
       fieldset.removeAttribute(`disabled`);
     }
-
-    let buttonPin = map.querySelectorAll(`.map__pin`);
-
-    if (buttonPin.length > 1) {
-      for (let fieldset of mapFilterFieldsets) {
-        fieldset.removeAttribute(`disabled`);
-      }
-
-      for (let select of mapFilterSelects) {
-        select.removeAttribute(`disabled`);
-      }
-    }
   };
-
 
   // Рендер карточки
 
