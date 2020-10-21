@@ -8,7 +8,7 @@ const StatusCode = {
   OK: 200
 };
 
-const Request = {
+const RequestType = {
   GET: `GET`,
   POST: `POST`
 };
@@ -49,9 +49,9 @@ let requestOnServer = (request, url, onLoad, onError, data) => {
 
 window.backend = {
   load(onLoad, onError) {
-    requestOnServer(Request.GET, URL_LOAD, onLoad, onError);
+    requestOnServer(RequestType.GET, URL_LOAD, onLoad, onError);
   },
   upload(data, onLoad, onError) {
-    requestOnServer(Request.POST, URL_UPLOAD, onLoad, onError, data);
+    requestOnServer(RequestType.POST, URL_UPLOAD, onLoad, onError, data);
   }
 };
