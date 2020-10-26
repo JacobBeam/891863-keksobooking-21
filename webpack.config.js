@@ -6,6 +6,7 @@ module.exports = {
     "./js/backend.js",
     "./js/data.js",
     "./js/form.js",
+    "./js/preview.js",
     "./js/pin.js",
     "./js/card.js",
     "./js/map.js",

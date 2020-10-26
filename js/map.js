@@ -1,6 +1,6 @@
 'use strict';
-
 (function () {
+
   const filtersContainer = document.querySelector(`.map__filters-container`);
   const map = document.querySelector(`.map`);
   const pinsList = map.querySelector(`.map__pins`);

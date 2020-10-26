@@ -2,6 +2,7 @@
 (function () {
   // Заполнение поля Адрес при неактивном состоянии страницы
   const FILTER_RESET_VALUE = `any`;
+  const MAP_PIN_MAIN_START_STYLE = `left: 570px; top: 375px;`;
   const map = document.querySelector(`.map`);
   const mapPinMain = map.querySelector(`.map__pin--main`);
   const adForm = document.querySelector(`.ad-form`);
@@ -30,6 +31,7 @@
       select.setAttribute(`disabled`, `disabled`);
     }
 
+    mapPinMain.style.cssText = MAP_PIN_MAIN_START_STYLE;
 
     // Активация страницы по ЛКМ
     mapPinMain.addEventListener(`mousedown`, (evt) => {
@@ -76,7 +78,7 @@
 
   // Функция активации страницы
   let activationPage = () => {
-    window.backend.load(window.data.successLoadRequestHandler, window.data.errorLoadRequestHandler);
+    window.backend.load(window.data.onSuccessLoadRequest, window.data.onErrorLoadRequest);
 
     map.classList.remove(`map--faded`);
     adForm.classList.remove(`ad-form--disabled`);

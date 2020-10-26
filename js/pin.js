@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-
   const mapPinTemplate = document.querySelector(`#pin`).content.querySelector(`.map__pin`);
   const OFFSET_X_PIN = 50;
   const OFFSET_Y_PIN = 70;

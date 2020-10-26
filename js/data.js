@@ -1,5 +1,4 @@
 'use strict';
-
 (function () {
   const MAX_PINS_AMOUNT = 5;
   const FILTER_RESET_VALUE = `any`;
@@ -23,13 +22,13 @@
     ads: [],
     maxPinsAmount: MAX_PINS_AMOUNT,
     downloadedData: null,
-    successLoadRequestHandler(dataAds) {
+    onSuccessLoadRequest(dataAds) {
       window.data.ads = dataAds;
       window.data.downloadedData = dataAds;
       window.map.renderPins();
       activationMapFilters();
     },
-    errorLoadRequestHandler(errorMessage) {
+    onErrorLoadRequest(errorMessage) {
       let node = document.createElement(`div`);
       node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
       node.style.position = `fixed`;

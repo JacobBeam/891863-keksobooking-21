@@ -42,5 +42,4 @@
 
   placePreview(avatarInput, avatarPreview);
   placePreview(photoInput, photoPreview);
-
 })();

@@ -156,21 +156,21 @@ ${Math.round(parseInt((mapPinMain.style.top), 10) + MAP_PIN_MAIN_OFFSET_Y)}`;
   };
 
 
-  let successUploadRequestHandler = () => {
+  let onSuccessUploadRequest = () => {
     openMessage(successMessage);
     adForm.reset();
     window.main.deactivationPage();
   };
 
 
-  let errorUploadRequestHandler = () => {
+  let onErrorUploadRequest = () => {
     openMessage(errorMessage);
   };
 
 
   adForm.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
-    window.backend.upload(new FormData(adForm), successUploadRequestHandler, errorUploadRequestHandler);
+    window.backend.upload(new FormData(adForm), onSuccessUploadRequest, onErrorUploadRequest);
   });
 
 
