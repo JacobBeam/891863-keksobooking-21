@@ -8,6 +8,9 @@ const HALF_WIDTH_MAP_PIN_MAIN = mapPinMain.offsetWidth / 2;
 const HALF_HEIGHT_MAP_PIN_MAIN = mapPinMain.offsetHeight / 2;
 
 const adForm = document.querySelector(`.ad-form`);
+const photoPreview = adForm.querySelector(`.ad-form__photo`);
+const avatarPreview = adForm.querySelector(`.ad-form-header__preview img`);
+const defaultAvatarImage = `img/muffin-grey.svg`;
 const addressInput = adForm.querySelector(`#address`);
 const resetForm = document.querySelector(`.ad-form__reset`);
 
@@ -155,10 +158,19 @@ let openMessage = (message) => {
   message.addEventListener(`click`, onMessageClick);
 };
 
+let resetAvatar = () => {
+  avatarPreview.src = defaultAvatarImage;
+};
+
+let resetPhotoPrviw = () => {
+  photoPreview.innerHTML = ``;
+};
 
 let onSuccessUploadRequest = () => {
   openMessage(successMessage);
   adForm.reset();
+  resetAvatar();
+  resetPhotoPrviw();
   window.main.deactivationPage();
 };
 
@@ -177,5 +189,7 @@ adForm.addEventListener(`submit`, (evt) => {
 resetForm.addEventListener(`click`, (evt) => {
   evt.preventDefault();
   adForm.reset();
+  resetAvatar();
+  resetPhotoPrviw();
   window.main.deactivationPage();
 });
