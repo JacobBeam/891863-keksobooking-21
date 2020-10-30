@@ -47,11 +47,15 @@ let requestOnServer = (request, url, onLoad, onError, data) => {
   }
 };
 
+let load = (onLoad, onError) => {
+  requestOnServer(RequestType.GET, URL_LOAD, onLoad, onError);
+};
+
+let upload = (data, onLoad, onError) => {
+  requestOnServer(RequestType.POST, URL_UPLOAD, onLoad, onError, data);
+};
+
 window.backend = {
-  load(onLoad, onError) {
-    requestOnServer(RequestType.GET, URL_LOAD, onLoad, onError);
-  },
-  upload(data, onLoad, onError) {
-    requestOnServer(RequestType.POST, URL_UPLOAD, onLoad, onError, data);
-  }
+  load,
+  upload
 };

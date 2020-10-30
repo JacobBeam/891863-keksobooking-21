@@ -94,7 +94,5 @@ window.map.renderCardOnEnter();
 
 
 window.main = {
-  deactivationPage() {
-    deactivationPage();
-  }
+  deactivationPage
 };

@@ -32,18 +32,22 @@ const minPricePerNightMap = {
   palace: 10000
 };
 
-window.form = {
 
-  getStartMainPinCoords() {
-    addressInput.value =
-      `${Math.round(parseInt(mapPinMain.style.left, 10) + HALF_WIDTH_MAP_PIN_MAIN)},
+let getStartMainPinCoords = () => {
+  addressInput.value =
+    `${Math.round(parseInt(mapPinMain.style.left, 10) + HALF_WIDTH_MAP_PIN_MAIN)},
 ${Math.round(parseInt((mapPinMain.style.top), 10) + HALF_HEIGHT_MAP_PIN_MAIN)}`;
-  },
-  getMainPinCoords() {
-    addressInput.value =
-      `${Math.round(parseInt(mapPinMain.style.left, 10) + HALF_WIDTH_MAP_PIN_MAIN)},
+};
+
+let getMainPinCoords = () => {
+  addressInput.value =
+    `${Math.round(parseInt(mapPinMain.style.left, 10) + HALF_WIDTH_MAP_PIN_MAIN)},
 ${Math.round(parseInt((mapPinMain.style.top), 10) + MAP_PIN_MAIN_OFFSET_Y)}`;
-  }
+};
+
+window.form = {
+  getStartMainPinCoords,
+  getMainPinCoords
 };
 
 const timeinInput = adForm.querySelector(`#timein`);

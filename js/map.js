@@ -56,38 +56,47 @@ let appendNewCard = (evt) => {
   }
 };
 
+let renderPins = () => {
+  pinsList.append(getPinsBlock(window.data.ads));
+};
 
-window.map = {
-  renderPins() {
-    pinsList.append(getPinsBlock(window.data.ads));
-  },
-  removePins() {
-    let pinsItem = pinsList.children;
+let removePins = () => {
+  let pinsItem = pinsList.children;
 
-    for (let i = pinsItem.length - 1; i >= 0; i--) {
-      if (pinsItem[i].classList.contains(`map__pin`) && !pinsItem[i].classList.contains(`map__pin--main`)) {
-        pinsItem[i].remove();
-      }
-    }
-  },
-  renderCardOnClick() {
-    pinsList.addEventListener(`click`, (evt) => {
-      appendNewCard(evt);
-    });
-  },
-  renderCardOnEnter() {
-    map.addEventListener(`keydown`, (evt) => {
-      if (evt.key === `Enter`) {
-        evt.preventDefault();
-        appendNewCard(evt);
-      }
-    });
-  },
-  removeCard() {
-    let card = map.querySelector(`.map__card`);
-    if (card) {
-      card.remove();
-      document.removeEventListener(`keydown`, onCardEscPress);
+  for (let i = pinsItem.length - 1; i >= 0; i--) {
+    if (pinsItem[i].classList.contains(`map__pin`) && !pinsItem[i].classList.contains(`map__pin--main`)) {
+      pinsItem[i].remove();
     }
   }
+};
+
+let renderCardOnClick = () => {
+  pinsList.addEventListener(`click`, (evt) => {
+    appendNewCard(evt);
+  });
+};
+
+let renderCardOnEnter = () => {
+  map.addEventListener(`keydown`, (evt) => {
+    if (evt.key === `Enter`) {
+      evt.preventDefault();
+      appendNewCard(evt);
+    }
+  });
+};
+
+let removeCard = () => {
+  let card = map.querySelector(`.map__card`);
+  if (card) {
+    card.remove();
+    document.removeEventListener(`keydown`, onCardEscPress);
+  }
+};
+
+window.map = {
+  renderPins,
+  removePins,
+  renderCardOnClick,
+  renderCardOnEnter,
+  removeCard
 };
